@@ -1,0 +1,15 @@
+rbac:
+  create: true
+
+provider: cloudflare
+
+logLevel: debug
+
+cloudflare:
+  apiToken: CFAPIToken
+  email: user@user.com
+  proxied: false
+
+interval: "1m"
+
+policy: sync # or upsert-only' ]

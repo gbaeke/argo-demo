@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nginx
+  name: externaldns
   # You'll usually want to add your resources to the argocd namespace.
   namespace: argocd
 spec:
@@ -12,20 +12,20 @@ spec:
   source:
     repoURL: https://github.com/gbaeke/argo-demo.git
     targetRevision: HEAD
-    path: charts/nginx-ingress
+    path: charts/external-dns
 
     # helm specific config
     helm:
       # Extra parameters to set (same as setting through values.yaml, but these take precedence)
       parameters:
-      - name: "controller.publishService.enabled"
-        value: "true"
+      - name: "cloudflare.apiToken"
+        value: "atoken"
 
       # Release name override (defaults to application name)
-      releaseName: nginx-ingress
+      releaseName: external-dns
 
       valueFiles:
-      - values.yaml
+      - custom-values.yaml
 
   destination:
     server: https://kubernetes.default.svc
