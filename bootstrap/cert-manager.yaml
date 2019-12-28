@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  # You'll usually want to add your resources to the argocd namespace.
+  namespace: argocd
+spec:
+  # The project the application belongs to.
+  project: default
+
+  # Source of the application manifests
+  source:
+    repoURL: https://github.com/gbaeke/argo-demo.git
+    targetRevision: HEAD
+    path: charts/cert-manager
+
+    # helm specific config
+    helm:
+      # Release name override (defaults to application name)
+      releaseName: cert-manager
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+
+  # Sync policy
+  syncPolicy:
+    automated:
+      prune: false # Specifies if resources should be pruned during auto-syncing ( false by default ).
+      selfHeal: false # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).
