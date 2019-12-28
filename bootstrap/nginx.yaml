@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx
+  # You'll usually want to add your resources to the argocd namespace.
+  namespace: argocd
+spec:
+  # The project the application belongs to.
+  project: default
+
+  # Source of the application manifests
+  source:
+    repoURL: https://github.com/gbaeke/argo-demo.git
+    targetRevision: HEAD
+    path: charts/nginx
+
+    # helm specific config
+    helm:
+      # Extra parameters to set (same as setting through values.yaml, but these take precedence)
+      parameters:
+      - name: "controller.publishService.enabled"
+        value: true
+
+      # Release name override (defaults to application name)
+      releaseName: nginx-ingress
+
+      valueFiles:
+      - values.yaml
+      
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+
+  # Sync policy
+  syncPolicy:
+    automated:
+      prune: false # Specifies if resources should be pruned during auto-syncing ( false by default ).
+      selfHeal: false # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).
