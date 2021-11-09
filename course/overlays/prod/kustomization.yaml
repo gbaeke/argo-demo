@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: superapi-prd
+
+commonLabels:
+  environment: prd
+
+namePrefix: prd-
+
+resources:
+  - ../../base
+  - namespace.yaml
+  
+replicas:
+  - name: superapi
+    count: 3

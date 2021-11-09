@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: superapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: superapi
+  template:
+    metadata:
+      labels:
+        app: superapi
+    spec:
+      securityContext:
+        runAsUser: 10000
+        runAsGroup: 10000
+        runAsNonRoot: true
+      containers:
+      - name: superapi
+        image: ghcr.io/gbaeke/super:1.0.2
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 8080
+        securityContext:
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - all
+        env:
+        - name: PORT
+          value: "8080"
+        - name: WELCOME
+          value: "Hello from superapi base!"
