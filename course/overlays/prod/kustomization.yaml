@@ -14,4 +14,4 @@ resources:
   
 replicas:
   - name: superapi
-    count: 3
+    count: 5
